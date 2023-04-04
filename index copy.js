@@ -16,6 +16,8 @@ server.use(
   })
 );
 
+const showRoutes = require("./routes/index.js");
+server.use("/api", showRoutes(server));
 server.get("/", async (req, res) => {
   res.send("funciona");
 });
@@ -27,13 +29,19 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 
 var client = new Client({
   authStrategy: new LocalAuth(),
-  puppeteer: {
-		args: ['--no-sandbox'],
-	}
 });
 
 
+//const qrCode = require("qrcode-terminal");
+//const client = new Client();
 
+/*
+client.on('qr', (qr) => {
+
+  qrCode.generate(qr,{small:true})
+  console.log('QR RECEIVED', qr);
+});
+*/
 client.on("ready", () => {
   console.log("Client is ready!");
 });
@@ -55,7 +63,8 @@ server.get("/send-qr", async (req, res) => {
       }, 60000 * 10); //15000
     });
     console.log(qrRes);
-  
+   // const jsonContent = JSON.stringify(qr);
+   // res.send(jsonContent);
     res.send({ qr: qrRes });
   } catch (err) {
     res.send(err.message);
@@ -63,9 +72,9 @@ server.get("/send-qr", async (req, res) => {
 });
 
 server.get("/send-message", async (req, res) => {
-
+  //console.log("req param ",req.params)
   console.log ("reciendo datos ",req.query)
-
+   //console.log ("reciendo datos ",req.body)
   const { phone, message } = req.query;
 
   const codeCountry="591"
@@ -105,6 +114,18 @@ server.post("/send-message", async (req, res) => {
       });
     res.send({ success: true });
   }
+});
+
+server.get("/delete-carp", async (req, res) => {
+  const filePath = ".wwebjs_auth/session/Default";
+  fs.access(filePath, (error) => {
+    if (!error) {
+      fs.unlinkSync(filePath);
+    } else {
+      console.error("Error occured:", error);
+    }
+  });
+  res.send("funciona");
 });
 
 
