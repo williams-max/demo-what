@@ -98,7 +98,7 @@ server.get("/send-message", async (req, res) => {
 });
 
 server.post("/send-message", async (req, res) => {
-  // console.log ("reciendo datos ",req.body)
+  // console.log ("reciendo datos ",req.body)/Pk
   const { code, number, message } = req.body;
   console.log("datos recibidos ", code, number, message);
   if (!code || !number || !message) {
@@ -138,7 +138,7 @@ server.get("/ok", async (req, res) => {
   res.send("funciona");
 });
 
-client.initialize();
+//client.initialize();
 
 function handleErrors(err, req, res, next) {
   console.log(err);
