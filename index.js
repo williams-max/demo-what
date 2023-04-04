@@ -138,7 +138,7 @@ server.get("/ok", async (req, res) => {
   res.send("funciona");
 });
 
-//client.initialize();
+client.initialize();
 
 function handleErrors(err, req, res, next) {
   console.log(err);
